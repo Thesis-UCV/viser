@@ -115,7 +115,7 @@ export default function ControlPanel(props: {
         <BottomPanel.Handle>
           <ConnectionStatus />
           <BottomPanel.HideWhenCollapsed>
-            <ShareButton />
+
             {generatedServerToggleButton}
           </BottomPanel.HideWhenCollapsed>
         </BottomPanel.Handle>
@@ -129,7 +129,7 @@ export default function ControlPanel(props: {
         <FloatingPanel.Handle>
           <ConnectionStatus />
           <FloatingPanel.HideWhenCollapsed>
-            <ShareButton />
+
             {generatedServerToggleButton}
           </FloatingPanel.HideWhenCollapsed>
         </FloatingPanel.Handle>
