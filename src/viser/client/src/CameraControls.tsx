@@ -450,6 +450,29 @@ export function SynchronizedCameraControls() {
       cameraControls.elevate(0.002 * event?.deltaTime, true);
     });
 
+    // Space = elevate up (same as E), Shift = elevate down (same as Q).
+    const spaceKey = new holdEvent.KeyboardKeyHold("Space", 20);
+    const shiftLeftKey = new holdEvent.KeyboardKeyHold("ShiftLeft", 20);
+    const shiftRightKey = new holdEvent.KeyboardKeyHold("ShiftRight", 20);
+
+    const isInputFocused = () => {
+      const tag = document.activeElement?.tagName;
+      return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+    };
+
+    spaceKey.addEventListener("holding", (event) => {
+      if (isInputFocused()) return;
+      cameraControls.elevate(0.002 * event?.deltaTime, true);
+    });
+    shiftLeftKey.addEventListener("holding", (event) => {
+      if (isInputFocused()) return;
+      cameraControls.elevate(-0.002 * event?.deltaTime, true);
+    });
+    shiftRightKey.addEventListener("holding", (event) => {
+      if (isInputFocused()) return;
+      cameraControls.elevate(-0.002 * event?.deltaTime, true);
+    });
+
     const leftKey = new holdEvent.KeyboardKeyHold("ArrowLeft", 20);
     const rightKey = new holdEvent.KeyboardKeyHold("ArrowRight", 20);
     const upKey = new holdEvent.KeyboardKeyHold("ArrowUp", 20);
