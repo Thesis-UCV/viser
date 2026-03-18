@@ -294,6 +294,29 @@ class SceneApi:
             _messages.SetSceneNodeVisibilityMessage("", visible)
         )
 
+    def configure_camera_controls(
+        self,
+        orbit_speed: float = 1.0,
+        pan_speed: float = 1.0,
+        zoom_speed: float = 1.0,
+        move_speed: float = 1.0,
+        damping: float = 0.12,
+    ) -> None:
+        """Configure camera control parameters for all connected clients.
+
+        All speed parameters are multipliers (1.0 = default).
+        Damping is smoothTime in seconds (lower = snappier, higher = smoother).
+        """
+        self._websock_interface.queue_message(
+            _messages.ConfigureCameraControlsMessage(
+                orbit_speed=orbit_speed,
+                pan_speed=pan_speed,
+                zoom_speed=zoom_speed,
+                move_speed=move_speed,
+                damping=damping,
+            )
+        )
+
     @deprecated_positional_shim
     def add_light_directional(
         self,

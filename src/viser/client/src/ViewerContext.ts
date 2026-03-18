@@ -25,6 +25,13 @@ export type ViewerMutable = {
   camera: THREE.PerspectiveCamera | null;
   backgroundMaterial: THREE.ShaderMaterial | null;
   cameraControl: CameraControls | null;
+  cameraControlsConfig?: {
+    orbitSpeed: number;
+    panSpeed: number;
+    zoomSpeed: number;
+    moveSpeed: number;
+    damping: number;
+  };
 
   // Scene management.
   nodeRefFromName: {

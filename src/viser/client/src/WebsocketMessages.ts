@@ -1226,6 +1226,21 @@ export interface SetCameraFovMessage {
   type: "SetCameraFovMessage";
   fov: number;
 }
+/** Server -> client message to configure camera control parameters.
+ *
+ * All speed fields are multipliers (1.0 = default). Damping is smoothTime
+ * in seconds (lower = snappier, higher = smoother).
+ *
+ * (automatically generated)
+ */
+export interface ConfigureCameraControlsMessage {
+  type: "ConfigureCameraControlsMessage";
+  orbit_speed: number;
+  pan_speed: number;
+  zoom_speed: number;
+  move_speed: number;
+  damping: number;
+}
 /** Server -> client message to set a scene node's orientation.
  *
  * As with all other messages, transforms take the `T_parent_local` convention.
@@ -1574,6 +1589,7 @@ export type Message =
   | SetCameraNearMessage
   | SetCameraFarMessage
   | SetCameraFovMessage
+  | ConfigureCameraControlsMessage
   | SetOrientationMessage
   | SetPositionMessage
   | TransformControlsUpdateMessage

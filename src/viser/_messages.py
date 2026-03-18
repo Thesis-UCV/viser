@@ -903,6 +903,21 @@ class SetCameraFovMessage(Message):
 
 
 @dataclasses.dataclass
+class ConfigureCameraControlsMessage(Message):
+    """Server -> client message to configure camera control parameters.
+
+    All speed fields are multipliers (1.0 = default). Damping is smoothTime
+    in seconds (lower = snappier, higher = smoother).
+    """
+
+    orbit_speed: float = 1.0
+    pan_speed: float = 1.0
+    zoom_speed: float = 1.0
+    move_speed: float = 1.0
+    damping: float = 0.12
+
+
+@dataclasses.dataclass
 class SetOrientationMessage(Message):
     """Server -> client message to set a scene node's orientation.
 

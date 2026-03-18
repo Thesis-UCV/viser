@@ -418,19 +418,25 @@ export function SynchronizedCameraControls() {
     return () => resizeObserver.disconnect();
   }, [canvas]);
 
-  // Distance-proportional pan/zoom speed and touch tuning.
+  // Distance-proportional pan/zoom speed, touch tuning, and config overrides.
   const touchConfigured = useRef(false);
   useFrame(() => {
     const cameraControls = viewerMutable.cameraControl;
     if (!cameraControls) return;
 
-    cameraControls.truckSpeed = Math.max(0.1, cameraControls.distance * 0.5);
-    cameraControls.dollySpeed = Math.max(0.1, cameraControls.distance * 0.15);
+    const config = viewerMutable.cameraControlsConfig ?? {
+      orbitSpeed: 1.0, panSpeed: 1.0, zoomSpeed: 1.0, moveSpeed: 1.0, damping: 0.12,
+    };
+    const dist = cameraControls.distance;
+
+    cameraControls.azimuthRotateSpeed = 0.5 * config.orbitSpeed;
+    cameraControls.polarRotateSpeed = 0.5 * config.orbitSpeed;
+    cameraControls.truckSpeed = Math.max(0.1, dist * 0.5) * config.panSpeed;
+    cameraControls.dollySpeed = Math.max(0.1, dist * 0.15) * config.zoomSpeed;
+    cameraControls.smoothTime = config.damping;
 
     // One-time touch configuration.
     if (!touchConfigured.current) {
-      cameraControls.azimuthRotateSpeed = 0.5;
-      cameraControls.polarRotateSpeed = 0.5;
       // @ts-ignore — touches property exists on camera-controls instance
       cameraControls.touches.one = CameraControls.ACTION.TOUCH_ROTATE;
       // @ts-ignore
@@ -454,9 +460,11 @@ export function SynchronizedCameraControls() {
 
     // Scale movement speed proportionally to camera-to-target distance.
     function scaleSpeed(baseSpeed: number): number {
+      const config = viewerMutable.cameraControlsConfig;
+      const multiplier = config?.moveSpeed ?? 1.0;
       const distance = cameraControls.distance;
       const scale = Math.max(0.01, Math.min(distance, 100.0));
-      return baseSpeed * scale;
+      return baseSpeed * scale * multiplier;
     }
 
     // TODO: these event listeners are currently never removed, even if this

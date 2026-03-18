@@ -318,6 +318,16 @@ function useMessageHandler(): (message: Message) => void {
         viewerMutable.sendCamera !== null && viewerMutable.sendCamera();
         return;
       }
+      case "ConfigureCameraControlsMessage": {
+        viewerMutable.cameraControlsConfig = {
+          orbitSpeed: message.orbit_speed,
+          panSpeed: message.pan_speed,
+          zoomSpeed: message.zoom_speed,
+          moveSpeed: message.move_speed,
+          damping: message.damping,
+        };
+        return;
+      }
       case "SetCameraNearMessage": {
         const camera = viewerMutable.camera!;
         camera.near = message.near;
