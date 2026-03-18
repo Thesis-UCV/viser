@@ -418,12 +418,26 @@ export function SynchronizedCameraControls() {
     return () => resizeObserver.disconnect();
   }, [canvas]);
 
-  // Distance-proportional pan and zoom speed.
+  // Distance-proportional pan/zoom speed and touch tuning.
+  const touchConfigured = useRef(false);
   useFrame(() => {
     const cameraControls = viewerMutable.cameraControl;
-    if (cameraControls) {
-      cameraControls.truckSpeed = Math.max(0.1, cameraControls.distance * 0.5);
-      cameraControls.dollySpeed = Math.max(0.1, cameraControls.distance * 0.15);
+    if (!cameraControls) return;
+
+    cameraControls.truckSpeed = Math.max(0.1, cameraControls.distance * 0.5);
+    cameraControls.dollySpeed = Math.max(0.1, cameraControls.distance * 0.15);
+
+    // One-time touch configuration.
+    if (!touchConfigured.current) {
+      cameraControls.azimuthRotateSpeed = 0.5;
+      cameraControls.polarRotateSpeed = 0.5;
+      // @ts-ignore — touches property exists on camera-controls instance
+      cameraControls.touches.one = CameraControls.ACTION.TOUCH_ROTATE;
+      // @ts-ignore
+      cameraControls.touches.two = CameraControls.ACTION.TOUCH_DOLLY_TRUCK;
+      // @ts-ignore
+      cameraControls.touches.three = CameraControls.ACTION.TOUCH_TRUCK;
+      touchConfigured.current = true;
     }
   });
 
