@@ -418,6 +418,15 @@ export function SynchronizedCameraControls() {
     return () => resizeObserver.disconnect();
   }, [canvas]);
 
+  // Distance-proportional pan and zoom speed.
+  useFrame(() => {
+    const cameraControls = viewerMutable.cameraControl;
+    if (cameraControls) {
+      cameraControls.truckSpeed = Math.max(0.1, cameraControls.distance * 0.5);
+      cameraControls.dollySpeed = Math.max(0.1, cameraControls.distance * 0.15);
+    }
+  });
+
   // Keyboard controls.
   React.useEffect(() => {
     const cameraControls = viewerMutable.cameraControl!;
@@ -429,25 +438,32 @@ export function SynchronizedCameraControls() {
     const qKey = new holdEvent.KeyboardKeyHold("KeyQ", 20);
     const eKey = new holdEvent.KeyboardKeyHold("KeyE", 20);
 
+    // Scale movement speed proportionally to camera-to-target distance.
+    function scaleSpeed(baseSpeed: number): number {
+      const distance = cameraControls.distance;
+      const scale = Math.max(0.01, Math.min(distance, 100.0));
+      return baseSpeed * scale;
+    }
+
     // TODO: these event listeners are currently never removed, even if this
     // component gets unmounted.
     aKey.addEventListener("holding", (event) => {
-      cameraControls.truck(-0.002 * event?.deltaTime, 0, true);
+      cameraControls.truck(-scaleSpeed(0.002) * event?.deltaTime, 0, true);
     });
     dKey.addEventListener("holding", (event) => {
-      cameraControls.truck(0.002 * event?.deltaTime, 0, true);
+      cameraControls.truck(scaleSpeed(0.002) * event?.deltaTime, 0, true);
     });
     wKey.addEventListener("holding", (event) => {
-      cameraControls.forward(0.002 * event?.deltaTime, true);
+      cameraControls.forward(scaleSpeed(0.002) * event?.deltaTime, true);
     });
     sKey.addEventListener("holding", (event) => {
-      cameraControls.forward(-0.002 * event?.deltaTime, true);
+      cameraControls.forward(-scaleSpeed(0.002) * event?.deltaTime, true);
     });
     qKey.addEventListener("holding", (event) => {
-      cameraControls.elevate(-0.002 * event?.deltaTime, true);
+      cameraControls.elevate(-scaleSpeed(0.002) * event?.deltaTime, true);
     });
     eKey.addEventListener("holding", (event) => {
-      cameraControls.elevate(0.002 * event?.deltaTime, true);
+      cameraControls.elevate(scaleSpeed(0.002) * event?.deltaTime, true);
     });
 
     // Space = elevate up (same as E), Shift = elevate down (same as Q).
@@ -462,15 +478,15 @@ export function SynchronizedCameraControls() {
 
     spaceKey.addEventListener("holding", (event) => {
       if (isInputFocused()) return;
-      cameraControls.elevate(0.002 * event?.deltaTime, true);
+      cameraControls.elevate(scaleSpeed(0.002) * event?.deltaTime, true);
     });
     shiftLeftKey.addEventListener("holding", (event) => {
       if (isInputFocused()) return;
-      cameraControls.elevate(-0.002 * event?.deltaTime, true);
+      cameraControls.elevate(-scaleSpeed(0.002) * event?.deltaTime, true);
     });
     shiftRightKey.addEventListener("holding", (event) => {
       if (isInputFocused()) return;
-      cameraControls.elevate(-0.002 * event?.deltaTime, true);
+      cameraControls.elevate(-scaleSpeed(0.002) * event?.deltaTime, true);
     });
 
     const leftKey = new holdEvent.KeyboardKeyHold("ArrowLeft", 20);
@@ -519,9 +535,8 @@ export function SynchronizedCameraControls() {
       <CameraControls
         ref={(controls) => (viewerMutable.cameraControl = controls)}
         minDistance={0.01}
-        dollySpeed={0.3}
-        smoothTime={0.05}
-        draggingSmoothTime={0.0}
+        smoothTime={0.12}
+        draggingSmoothTime={0.04}
         onChange={sendCamera}
         makeDefault
       />
