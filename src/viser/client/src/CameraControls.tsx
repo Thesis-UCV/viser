@@ -419,24 +419,12 @@ export function SynchronizedCameraControls() {
     return () => resizeObserver.disconnect();
   }, [canvas]);
 
-  // Distance-proportional pan/zoom speed, touch tuning, and config overrides.
+  // One-time touch configuration.
   const touchConfigured = useRef(false);
   useFrame(() => {
     const cameraControls = viewerMutable.cameraControl;
     if (!cameraControls) return;
 
-    const config = viewerMutable.cameraControlsConfig ?? {
-      orbitSpeed: 1.0, panSpeed: 1.0, zoomSpeed: 1.0, moveSpeed: 1.0, damping: 0.12,
-    };
-    const dist = cameraControls.distance;
-
-    cameraControls.azimuthRotateSpeed = 0.5 * config.orbitSpeed;
-    cameraControls.polarRotateSpeed = 0.5 * config.orbitSpeed;
-    cameraControls.truckSpeed = Math.max(0.1, dist * 0.5) * config.panSpeed;
-    cameraControls.dollySpeed = Math.max(0.1, dist * 0.15) * config.zoomSpeed;
-    cameraControls.smoothTime = config.damping;
-
-    // One-time touch configuration.
     if (!touchConfigured.current) {
       // @ts-ignore — touches property exists on camera-controls instance
       cameraControls.touches.one = CameraControlsImpl.ACTION.TOUCH_ROTATE;
@@ -558,8 +546,9 @@ export function SynchronizedCameraControls() {
       <CameraControls
         ref={(controls) => (viewerMutable.cameraControl = controls)}
         minDistance={0.01}
-        smoothTime={0.12}
-        draggingSmoothTime={0.04}
+        dollySpeed={0.3}
+        smoothTime={0.05}
+        draggingSmoothTime={0.0}
         onChange={sendCamera}
         makeDefault
       />
