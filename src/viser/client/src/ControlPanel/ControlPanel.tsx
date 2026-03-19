@@ -83,7 +83,7 @@ export default function ControlPanel(props: {
     >
       <Tooltip
         zIndex={100}
-        label={showSettings ? "Return to GUI" : "Configuration & diagnostics"}
+        label={showSettings ? "Volver a la interfaz" : "Configuración y diagnósticos"}
         withinPortal
       >
         {showSettings ? (
@@ -187,7 +187,7 @@ function ConnectionStatus() {
         )}
       </Transition>
       <Box px="xs" style={{ flexGrow: 1, letterSpacing: "-0.5px" }} pt="0.1em">
-        {label !== "" ? label : connected ? "Connected" : "Connecting..."}
+        {label !== "" ? label : connected ? "Conectado" : "Conectando..."}
       </Box>
     </>
   );

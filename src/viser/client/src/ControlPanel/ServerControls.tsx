@@ -28,7 +28,7 @@ export default function ServerControls() {
     <>
       {showStats ? <Stats className="stats-panel" /> : null}
       <Stack gap="xs" mt="0.3em">
-        <Tooltip label="Server URL" position="top-start">
+        <Tooltip label="URL del Servidor" position="top-start">
           <TextInput
             leftSection={
               <Image
@@ -115,7 +115,7 @@ export default function ServerControls() {
             px="0"
             style={{ height: "1.875rem" }}
           >
-            Save Canvas
+            Guardar Lienzo
           </Button>
           <Button
             onClick={() => {
@@ -130,21 +130,21 @@ export default function ServerControls() {
             px="0"
             style={{ height: "1.875rem" }}
           >
-            Reset View
+            Restablecer Vista
           </Button>
         </Group>
         <Group gap="md">
           <Tooltip
             label={
               <>
-                Show tool for setting the look-at point and
+                Herramienta para establecer el punto de
                 <br />
-                up direction of the camera.
+                enfoque y la dirección vertical de la cámara.
                 <br />
                 <br />
-                This can be used to set the origin of the
+                Se puede usar para definir el origen de los
                 <br />
-                camera&apos;s orbit controls.
+                controles de órbita.
               </>
             }
             refProp="rootRef"
@@ -152,7 +152,7 @@ export default function ServerControls() {
           >
             <Checkbox
               radius="xs"
-              label="Orbit Origin Tool"
+              label="Herramienta de Órbita"
               onChange={(event) => {
                 viewer.useGui.setState({
                   showOrbitOriginTool: event.currentTarget.checked,
@@ -166,13 +166,13 @@ export default function ServerControls() {
             />
           </Tooltip>
           <Tooltip
-            label={"Show WebGL statistics."}
+            label={"Mostrar estadísticas WebGL."}
             refProp="rootRef"
             position="top-start"
           >
             <Checkbox
               radius="xs"
-              label="WebGL Stats"
+              label="Estadísticas WebGL"
               onChange={(event) => {
                 setShowStats(event.currentTarget.checked);
               }}
@@ -189,15 +189,15 @@ export default function ServerControls() {
           <Tooltip
             label={
               <>
-                Hierarchical view of all objects in the 3D scene.
+                Vista jerárquica de todos los objetos en la escena 3D.
                 <br />
-                Use to override visibility and properties.
+                Permite modificar visibilidad y propiedades.
               </>
             }
             position="top-start"
           >
             <Text style={{ fontWeight: 500 }} fz="sm">
-              Scene tree
+              Árbol de Escena
             </Text>
           </Tooltip>
           <MemoizedTable />
