@@ -1,5 +1,6 @@
 import { ViewerContext } from "./ViewerContext";
 import { CameraControls } from "@react-three/drei";
+import CameraControlsImpl from "camera-controls";
 import { useThree } from "@react-three/fiber";
 import * as holdEvent from "hold-event";
 import React, { useContext, useRef, useState } from "react";
@@ -438,11 +439,11 @@ export function SynchronizedCameraControls() {
     // One-time touch configuration.
     if (!touchConfigured.current) {
       // @ts-ignore — touches property exists on camera-controls instance
-      cameraControls.touches.one = CameraControls.ACTION.TOUCH_ROTATE;
+      cameraControls.touches.one = CameraControlsImpl.ACTION.TOUCH_ROTATE;
       // @ts-ignore
-      cameraControls.touches.two = CameraControls.ACTION.TOUCH_DOLLY_TRUCK;
+      cameraControls.touches.two = CameraControlsImpl.ACTION.TOUCH_DOLLY_TRUCK;
       // @ts-ignore
-      cameraControls.touches.three = CameraControls.ACTION.TOUCH_TRUCK;
+      cameraControls.touches.three = CameraControlsImpl.ACTION.TOUCH_TRUCK;
       touchConfigured.current = true;
     }
   });
