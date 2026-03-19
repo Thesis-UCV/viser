@@ -23,6 +23,7 @@ export default defineConfig({
   worker: {
     format: "es",
   },
+  base: "./",
   build: {
     outDir: "build",
     target: browserslistToEsbuild(),
